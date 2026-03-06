@@ -1,0 +1,7 @@
+If we need a NotificationService that sends an email when a task is completed, I would choose an asynchronous integration pattern.
+
+Using asynchronous messaging with a message broker such as RabbitMQ allows the Task Service to publish a TaskCompleted event without waiting for the NotificationService to respond.
+
+This approach improves scalability, reliability, and fault tolerance. If the NotificationService is unavailable, the message remains in the queue and can be processed later.
+
+In contrast, synchronous HTTP/REST communication tightly couples services and may slow down the API if the NotificationService fails or becomes slow.
