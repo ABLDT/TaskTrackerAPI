@@ -1,0 +1,5 @@
+services:
+  tasktrackerapi:
+    build: .
+    ports:
+      - "8080:8080"
