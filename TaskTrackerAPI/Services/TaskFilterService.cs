@@ -7,17 +7,19 @@ public static class TaskFilterService
     public static List<BugReportTask> GetHighSeverityBugs(IEnumerable<BaseTask> tasks)
     {
         return tasks
-            .OfType<BugReportTask>()
-            .Where(t => !t.IsCompleted && t.SeverityLevel >= 8)
+            .Where(task => task is BugReportTask { SeverityLevel: >= 8, IsCompleted: false })
+            .Cast<BugReportTask>()
             .OrderByDescending(t => t.CreatedAt)
             .ToList();
     }
 
     public static int GetTotalEstimatedHours(IEnumerable<BaseTask> tasks)
     {
-        return tasks
-            .OfType<FeatureRequestTask>()
-            .Where(t => !t.IsCompleted)
-            .Sum(t => t.EstimatedHours);
+        return tasks.Sum(task =>
+            task switch
+            {
+                FeatureRequestTask feature when !feature.IsCompleted => feature.EstimatedHours,
+                _ => 0
+            });
     }
 }
